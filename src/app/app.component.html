@@ -1,0 +1,6 @@
+<pre>{{ form.value | json }}</pre>
+<pre>{{ form.get('phone').touched | json }}</pre>
+
+<form [formGroup]="form">
+  <app-phone-input formControlName="phone"></app-phone-input>
+</form>
