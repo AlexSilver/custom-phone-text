@@ -1,6 +1,11 @@
 <pre>{{ form.value | json }}</pre>
 <pre>{{ form.get('phone').touched | json }}</pre>
+<pre>{{ form.get('phone').errors | json }}</pre>
 
 <form [formGroup]="form">
   <app-phone-input formControlName="phone"></app-phone-input>
+  <div *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+    <span class="error" *ngIf="phone.errors?.required">Required</span>
+    <span class="error" *ngIf="phone.errors?.pattern">Pattern</span>
+  </div>
 </form>

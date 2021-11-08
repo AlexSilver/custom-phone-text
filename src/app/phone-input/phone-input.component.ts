@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -26,6 +26,7 @@ import {
   ],
 })
 export class PhoneInputComponent implements ControlValueAccessor, Validator {
+  @ViewChild('inputref') inputref;
   value: string;
   onChange = (phone) => {};
   onTouched = () => {};
@@ -48,14 +49,35 @@ export class PhoneInputComponent implements ControlValueAccessor, Validator {
     this.disabled = isDisabled;
   }
   validate(control: AbstractControl): ValidationErrors | null {
-    return null;
+    if (!control.touched) {
+      return null;
+    }
+
+    const pattern = /^0(5[0123458])\d{7}$/;
+    const value = control.value;
+    if (!pattern.test(value)) {
+      return { pattern: true };
+    }
   }
   registerOnValidatorChange?(fn: () => void): void {
     this.onValidatorChange = fn;
   }
 
   input($event) {
-    this.onChange((<HTMLTextAreaElement>$event.target).value);
+    const value = (<HTMLTextAreaElement>$event.target).value;
+    console.log(value);
+    const sanitizedValue = this.sanitizePhoneNumber(value);
+    console.log(sanitizedValue);
+
+    if (value != sanitizedValue) {
+      this.inputref.nativeElement.value = sanitizedValue;
+    }
+
+    this.onChange(sanitizedValue);
     this.onTouched();
+  }
+
+  private sanitizePhoneNumber(value: string) {
+    return value.replace(/^[+]?972[0]?/g, '0').replace(/[^0-9]/g, '');
   }
 }

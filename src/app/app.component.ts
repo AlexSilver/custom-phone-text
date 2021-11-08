@@ -1,5 +1,5 @@
 import { Component, VERSION } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'my-app',
@@ -8,13 +8,19 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AppComponent {
   form: FormGroup;
+  phonemodel: string = '';
+
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      phone: [''],
+      phone: ['', Validators.required],
     });
   }
 
   get f() {
     return this.form.controls;
+  }
+
+  get phone() {
+    return this.form.get('phone');
   }
 }

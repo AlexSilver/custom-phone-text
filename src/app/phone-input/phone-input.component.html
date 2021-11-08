@@ -1,7 +1,11 @@
 <input
+  #inputref
   type="text"
+  inputmode="numeric"
   [value]="value"
   [disabled]="disabled"
   (input)="input($event)"
   (blur)="onTouched()"
+  maxlength="15"
+  minlength="10"
 />
